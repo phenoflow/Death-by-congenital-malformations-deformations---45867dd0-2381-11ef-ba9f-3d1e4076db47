@@ -1,0 +1,25 @@
+# John, A, McGregor, J., Jones, I., Lee, S. C., Walters, J. T. R., Owen, M. J., O'Donovan, M., DelPozo-Banos, M., Berridge, D., and Lloyd, K., 2024.
+
+import sys, csv, re
+
+codes = [{"code":"Q18.3","system":"icd10"},{"code":"Q65.8","system":"icd10"},{"code":"Q18.4","system":"icd10"},{"code":"Q74","system":"icd10"},{"code":"Q33.8","system":"icd10"},{"code":"Q82.1","system":"icd10"},{"code":"Q82.5","system":"icd10"},{"code":"Q66.8","system":"icd10"},{"code":"Q18.7","system":"icd10"},{"code":"Q82.2","system":"icd10"},{"code":"Q82","system":"icd10"},{"code":"Q12.8","system":"icd10"},{"code":"Q74.1","system":"icd10"},{"code":"Q18.5","system":"icd10"},{"code":"Q74.9","system":"icd10"},{"code":"Q82.0","system":"icd10"},{"code":"Q66.6","system":"icd10"},{"code":"Q18.6","system":"icd10"},{"code":"Q30.8","system":"icd10"},{"code":"Q82.3","system":"icd10"},{"code":"Q18","system":"icd10"},{"code":"Q74.8","system":"icd10"}];
+REQUIRED_CODES = 1;
+with open(sys.argv[1], 'r') as file_in, open('death-by-congenital-malformations-deformations-potential-cases.csv', 'w', newline='') as file_out:
+    csv_reader = csv.DictReader(file_in)
+    csv_writer = csv.DictWriter(file_out, csv_reader.fieldnames + ["other-death-by-congenital-malformations-deformations---secondary-identified"])
+    csv_writer.writeheader();
+    codes_identified = 0;
+    for row in csv_reader:
+        newRow = row.copy();
+        for cell in row:
+            # Iterate cell lists (e.g. codes)
+            for item in re.findall(r'\(([^,]*)\,', row[cell]):
+                if(item in list(map(lambda code: code['code'], codes))): codes_identified+=1;
+                if(codes_identified>=REQUIRED_CODES):
+                    newRow["other-death-by-congenital-malformations-deformations---secondary-identified"] = "CASE";
+                    break;
+            if(codes_identified>=REQUIRED_CODES): break;
+        if(codes_identified<REQUIRED_CODES):
+            newRow["other-death-by-congenital-malformations-deformations---secondary-identified"] = "UNK";
+        codes_identified=0;
+        csv_writer.writerow(newRow)
